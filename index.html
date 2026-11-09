@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NFT Gift Scanner</title>
+    <!-- Обязательный скрипт Telegram WebApp -->
+    <script src="https://telegram.org"></script>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f8fafc;
+            --sub: #94a3b8;
+            --accent: #38bdf8;
+            --green: #22c55e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 16px 16px 90px 16px;
+        }
+
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+        .header h1 { font-size: 20px; font-weight: 700; }
+        .badge { background: rgba(56, 189, 248, 0.15); color: var(--accent); padding: 5px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+
+        .search-box { width: 100%; padding: 12px 14px; border-radius: 14px; border: 1px solid #334155; background: var(--card); color: var(--text); font-size: 14px; margin-bottom: 14px; outline: none; }
+        .search-box:focus { border-color: var(--accent); }
+
+        .gift-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .gift-card { background: var(--card); border-radius: 16px; padding: 14px; border: 1px solid #334155; display: flex; flex-direction: column; justify-content: space-between; }
+        .gift-emoji { font-size: 34px; margin-bottom: 8px; }
+        .gift-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+        .gift-meta { font-size: 12px; color: var(--sub); margin-bottom: 10px; }
+        .gift-price-row { display: flex; justify-content: space-between; align-items: center; }
+        .price-tag { font-size: 15px; font-weight: 700; color: var(--accent); }
+        .diff-tag { font-size: 11px; font-weight: 600; color: var(--green); background: rgba(34, 197, 94, 0.15); padding: 3px 6px; border-radius: 6px; }
+
+        .plan-card { background: var(--card); border-radius: 16px; padding: 16px; margin-bottom: 12px; border: 1px solid #334155; }
+        .plan-card.popular { border-color: var(--accent); }
+        .plan-title { font-size: 17px; font-weight: 700; margin-bottom: 6px; display: flex; justify-content: space-between; }
+        .plan-desc { font-size: 13px; color: var(--sub); margin-bottom: 12px; }
+        .btn-pay { width: 100%; padding: 11px; border: none; border-radius: 12px; background: var(--accent); color: #0f172a; font-weight: 700; font-size: 14px; cursor: pointer; margin-top: 6px; }
+        .btn-pay.secondary { background: #334155; color: var(--text); }
+
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 70px; background: rgba(30, 41, 59, 0.95); backdrop-filter: blur(10px); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #334155; z-index: 100; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--sub); font-size: 11px; font-weight: 600; cursor: pointer; background: none; border: none; gap: 4px; }
+        .nav-item.active { color: var(--accent); }
+        .nav-icon { font-size: 20px; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1 id="page-title">🛍 TG Market</h1>
+        <span class="badge" id="sub-badge">🎁 7 дней Free</span>
+    </div>
+
+    <input type="text" id="search-input" class="search-box" placeholder="🔍 Поиск подарка (Pepe, Cap, Peach...)" oninput="renderGifts()">
+
+    <div id="market-view" class="gift-grid"></div>
+
+    <div id="settings-view" class="hidden">
+        <div class="plan-card">
+            <div class="plan-title"><span>🎁 Пробный период</span> <span style="color:var(--green)">0 TON</span></div>
+            <div class="plan-desc">Полный доступ на 7 дней + скидка 50% на первый месяц!</div>
+            <button class="btn-pay" onclick="buyPlan('trial')">Активировать 7 дней бесплатно</button>
+        </div>
+
+        <div class="plan-card">
+            <div class="plan-title"><span>💎 Стандарт (1 маркет)</span> <span>7.5 TON / 500 ⭐</span></div>
+            <div class="plan-desc">Отслеживание 1 маркета на выбор (Со 2-го месяца: 15 TON или 1000 ⭐).</div>
+            <button class="btn-pay" onclick="buyPlan('std_ton')">Оплатить 7.5 TON (-50%)</button>
+            <button class="btn-pay secondary" onclick="buyPlan('std_stars')">Оплатить 500 Звезд ⭐</button>
+        </div>
+
+        <div class="plan-card popular">
+            <div class="plan-title"><span>🔥 Про (Все маркеты)</span> <span>15 TON / 1000 ⭐</span></div>
+            <div class="plan-desc">Все маркеты одновременно + снайпер (Со 2-го месяца: 30 TON или 2000 ⭐).</div>
+            <button class="btn-pay" onclick="buyPlan('pro_ton')">Оплатить 15 TON (-50%)</button>
+            <button class="btn-pay secondary" onclick="buyPlan('pro_stars')">Оплатить 1000 Звезд ⭐</button>
+        </div>
+
+        <div class="plan-card">
+            <div class="plan-title"><span>👑 Ультра (Год)</span> <span>320 TON</span></div>
+            <div class="plan-desc">Максимальный доступ ко всем функциям на 365 дней.</div>
+            <button class="btn-pay" onclick="buyPlan('ultra_ton')">Оплатить 320 TON (1 год)</button>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="switchTab('tg', this)">
+            <span class="nav-icon">🛍</span><span>TG Market</span>
+        </button>
+        <button class="nav-item" onclick="switchTab('tonnel', this)">
+            <span class="nav-icon">🚇</span><span>Tonnel</span>
+        </button>
+        <button class="nav-item" onclick="switchTab('mrkt', this)">
+            <span class="nav-icon">🏪</span><span>MRKT</span>
+        </button>
+        <button class="nav-item" onclick="switchTab('settings', this)">
+            <span class="nav-icon">⚙️</span><span>Настройки</span>
+        </button>
+    </nav>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+        let currentTab = 'tg';
+
+        const GIFTS = [
+            { name: "Plush Pepe", emoji: "🐸", model: "Gold #402", tg: 145, tonnel: 138, mrkt: 142, diff: "-4.8%" },
+            { name: "Durov's Cap", emoji: "🧢", model: "Black BG #88", tg: 51, tonnel: 49, mrkt: 48.5, diff: "-5.1%" },
+            { name: "Precious Peach", emoji: "🍑", model: "Ruby #1204", tg: 24, tonnel: 22.8, mrkt: 23.5, diff: "-5.0%" },
+            { name: "Eternal Rose", emoji: "🌹", model: "Neon #310", tg: 39, tonnel: 37.5, mrkt: 38, diff: "-3.8%" },
+            { name: "Jelly Bunny", emoji: "🐰", model: "Cyber #991", tg: 19.5, tonnel: 18.2, mrkt: 18.9, diff: "-6.6%" },
+            { name: "Loot Bag", emoji: "💰", model: "Emerald #77", tg: 88, tonnel: 84, mrkt: 86, diff: "-4.5%" }
+        ];
+
+        function renderGifts() {
+            const q = document.getElementById('search-input').value.toLowerCase();
+            const container = document.getElementById('market-view');
+            container.innerHTML = '';
+            GIFTS.filter(g => g.name.toLowerCase().includes(q) || g.model.toLowerCase().includes(q)).forEach(g => {
+                const price = g[currentTab];
+                container.innerHTML += `
+                    <div class="gift-card">
+                        <div>
+                            <div class="gift-emoji">${g.emoji}</div>
+                            <div class="gift-title">${g.name}</div>
+                            <div class="gift-meta">${g.model}</div>
+                        </div>
+                        <div class="gift-price-row">
+                            <span class="price-tag">${price} TON</span>
+                            <span class="diff-tag">${g.diff}</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function switchTab(tab, btn) {
+            currentTab = tab;
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            btn.classList.add('active');
+            const titles = { tg: "🛍 TG Market", tonnel: "🚇 Tonnel Market", mrkt: "🏪 MRKT", settings: "⚙️ Настройки и Подписка" };
+            document.getElementById('page-title').innerText = titles[tab];
+            if (tab === 'settings') {
+                document.getElementById('market-view').classList.add('hidden');
+                document.getElementById('search-input').classList.add('hidden');
+                document.getElementById('settings-view').classList.remove('hidden');
+            } else {
+                document.getElementById('settings-view').classList.add('hidden');
+                document.getElementById('market-view').classList.remove('hidden');
+                document.getElementById('search-input').classList.remove('hidden');
+                renderGifts();
+            }
+        }
+
+        function buyPlan(planCode) {
+            // Работает, если Mini App открыт через обычную кнопку клавиатуры (ReplyKeyboardMarkup)
+            tg.sendData(planCode);
+            tg.close();
+        }
+
+        renderGifts();
+    </script>
+</body>
+</html>
