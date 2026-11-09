@@ -13,90 +13,76 @@
             --sub: #94a3b8;
             --accent: #38bdf8;
             --green: #22c55e;
+            --purple: #c084fc;
         }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            padding: 16px 16px 90px 16px;
-        }
-
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-        .header h1 { font-size: 20px; font-weight: 700; }
-        .badge { background: rgba(56, 189, 248, 0.15); color: var(--accent); padding: 5px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
-
-        .search-box { width: 100%; padding: 12px 14px; border-radius: 14px; border: 1px solid #334155; background: var(--card); color: var(--text); font-size: 14px; margin-bottom: 14px; outline: none; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: var(--bg); color: var(--text); padding: 16px 16px 85px 16px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .header h1 { font-size: 18px; font-weight: 700; }
+        .badge { background: rgba(56, 189, 248, 0.15); color: var(--accent); padding: 5px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+        .live-dot { width: 7px; height: 7px; background: var(--green); border-radius: 50%; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+        .search-box { width: 100%; padding: 11px 14px; border-radius: 14px; border: 1px solid #334155; background: var(--card); color: var(--text); font-size: 14px; margin-bottom: 12px; outline: none; }
         .search-box:focus { border-color: var(--accent); }
-
-        .gift-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .gift-card { background: var(--card); border-radius: 16px; padding: 14px; border: 1px solid #334155; display: flex; flex-direction: column; justify-content: space-between; }
-        .gift-emoji { font-size: 34px; margin-bottom: 8px; }
-        .gift-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
-        .gift-meta { font-size: 12px; color: var(--sub); margin-bottom: 10px; }
-        .gift-price-row { display: flex; justify-content: space-between; align-items: center; }
-        .price-tag { font-size: 15px; font-weight: 700; color: var(--accent); }
-        .diff-tag { font-size: 11px; font-weight: 600; color: var(--green); background: rgba(34, 197, 94, 0.15); padding: 3px 6px; border-radius: 6px; }
-
+        .gift-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+        .gift-card { background: var(--card); border-radius: 16px; padding: 14px; border: 1px solid #334155; display: flex; flex-direction: column; gap: 10px; }
+        .gift-top { display: flex; align-items: center; gap: 12px; }
+        .gift-avatar { width: 52px; height: 52px; border-radius: 14px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); display: flex; align-items: center; justify-content: center; font-size: 26px; box-shadow: inset 0 0 10px rgba(255,255,255,0.3); }
+        .gift-info { flex-grow: 1; }
+        .gift-title { font-size: 16px; font-weight: 700; }
+        .gift-model { font-size: 12px; color: var(--purple); font-weight: 600; }
+        .prices-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: rgba(15, 23, 42, 0.6); padding: 8px; border-radius: 10px; }
+        .market-col { text-align: center; padding: 4px; border-radius: 6px; }
+        .market-col.selected { background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.4); }
+        .market-name { font-size: 10px; color: var(--sub); text-transform: uppercase; margin-bottom: 2px; }
+        .market-price { font-size: 13px; font-weight: 700; color: var(--accent); }
+        .history-box { font-size: 11px; color: var(--sub); border-top: 1px solid #334155; padding-top: 6px; display: flex; justify-content: space-between; align-items: center; }
+        .history-val { color: var(--text); font-weight: 600; }
         .plan-card { background: var(--card); border-radius: 16px; padding: 16px; margin-bottom: 12px; border: 1px solid #334155; }
         .plan-card.popular { border-color: var(--accent); }
-        .plan-title { font-size: 17px; font-weight: 700; margin-bottom: 6px; display: flex; justify-content: space-between; }
-        .plan-desc { font-size: 13px; color: var(--sub); margin-bottom: 12px; }
-        .btn-pay { width: 100%; padding: 11px; border: none; border-radius: 12px; background: var(--accent); color: #0f172a; font-weight: 700; font-size: 14px; cursor: pointer; margin-top: 6px; }
+        .plan-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; display: flex; justify-content: space-between; }
+        .plan-desc { font-size: 12px; color: var(--sub); margin-bottom: 12px; line-height: 1.4; }
+        .btn-pay { width: 100%; padding: 11px; border: none; border-radius: 12px; background: var(--accent); color: #0f172a; font-weight: 700; font-size: 13px; cursor: pointer; margin-top: 6px; }
         .btn-pay.secondary { background: #334155; color: var(--text); }
-
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 70px; background: rgba(30, 41, 59, 0.95); backdrop-filter: blur(10px); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #334155; z-index: 100; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--sub); font-size: 11px; font-weight: 600; cursor: pointer; background: none; border: none; gap: 4px; }
+        .btn-pay.crypto { background: #22c55e; color: #fff; }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 65px; background: rgba(30, 41, 59, 0.95); backdrop-filter: blur(10px); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #334155; z-index: 100; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--sub); font-size: 11px; font-weight: 600; cursor: pointer; background: none; border: none; gap: 3px; }
         .nav-item.active { color: var(--accent); }
-        .nav-icon { font-size: 20px; }
+        .nav-icon { font-size: 18px; }
         .hidden { display: none; }
     </style>
 </head>
 <body>
-
     <div class="header">
         <h1 id="page-title">🛍 TG Market</h1>
-        <span class="badge" id="sub-badge">🎁 7 дней Free</span>
+        <div class="badge"><span class="live-dot"></span> <span id="timer-label">Обновление: 1м</span></div>
     </div>
-
-    <input type="text" id="search-input" class="search-box" placeholder="🔍 Поиск подарка (Pepe, Cap, Peach...)" oninput="renderGifts()">
-
+    <input type="text" id="search-input" class="search-box" placeholder="🔍 Поиск по модели (Pepe, Cap, Duck...)" oninput="renderGifts()">
     <div id="market-view" class="gift-grid"></div>
-
     <div id="settings-view" class="hidden">
         <div class="plan-card">
             <div class="plan-title"><span>🎁 Пробный период</span> <span style="color:var(--green)">0 TON</span></div>
-            <div class="plan-desc">Полный доступ на 7 дней + скидка 50% на первый месяц!</div>
-            <button class="btn-pay" onclick="buyPlan('trial')">Активировать 7 дней бесплатно</button>
+            <div class="plan-desc">Полный доступ на 7 дней + скидка 50% на первый месяц подписки.</div>
+            <button class="btn-pay" onclick="payWithCrypto('trial', 0)">Активировать 7 дней бесплатно</button>
         </div>
-
         <div class="plan-card">
             <div class="plan-title"><span>💎 Стандарт (1 маркет)</span> <span>7.5 TON / 500 ⭐</span></div>
-            <div class="plan-desc">Отслеживание 1 маркета на выбор (Со 2-го месяца: 15 TON или 1000 ⭐).</div>
-            <button class="btn-pay" onclick="buyPlan('std_ton')">Оплатить 7.5 TON (-50%)</button>
-            <button class="btn-pay secondary" onclick="buyPlan('std_stars')">Оплатить 500 Звезд ⭐</button>
+            <div class="plan-desc">Обновление цен каждые 3 минуты. Скидка 50% на 1-й месяц (далее 15 TON).</div>
+            <button class="btn-pay crypto" onclick="payWithCrypto('std_ton', 7.5)">Оплатить 7.5 TON через CryptoBot</button>
+            <button class="btn-pay secondary" onclick="payWithStars('std_stars', 500)">Оплатить 500 Telegram Stars ⭐</button>
         </div>
-
         <div class="plan-card popular">
             <div class="plan-title"><span>🔥 Про (Все маркеты)</span> <span>15 TON / 1000 ⭐</span></div>
-            <div class="plan-desc">Все маркеты одновременно + снайпер (Со 2-го месяца: 30 TON или 2000 ⭐).</div>
-            <button class="btn-pay" onclick="buyPlan('pro_ton')">Оплатить 15 TON (-50%)</button>
-            <button class="btn-pay secondary" onclick="buyPlan('pro_stars')">Оплатить 1000 Звезд ⭐</button>
+            <div class="plan-desc">Молниеносное обновление каждую 1 минуту на всех маркетах + снайпер.</div>
+            <button class="btn-pay crypto" onclick="payWithCrypto('pro_ton', 15)">Оплатить 15 TON через CryptoBot</button>
+            <button class="btn-pay secondary" onclick="payWithStars('pro_stars', 1000)">Оплатить 1000 Telegram Stars ⭐</button>
         </div>
-
         <div class="plan-card">
-            <div class="plan-title"><span>👑 Ультра (Год)</span> <span>320 TON</span></div>
-            <div class="plan-desc">Максимальный доступ ко всем функциям на 365 дней.</div>
-            <button class="btn-pay" onclick="buyPlan('ultra_ton')">Оплатить 320 TON (1 год)</button>
+            <div class="plan-title"><span>👑 Ультра (Годовой)</span> <span>320 TON</span></div>
+            <div class="plan-desc">Максимальный приоритет сканирования (1 сек) на 365 дней.</div>
+            <button class="btn-pay crypto" onclick="payWithCrypto('ultra_ton', 320)">Оплатить 320 TON через CryptoBot</button>
         </div>
     </div>
-
     <nav class="bottom-nav">
         <button class="nav-item active" onclick="switchTab('tg', this)">
             <span class="nav-icon">🛍</span><span>TG Market</span>
@@ -111,86 +97,113 @@
             <span class="nav-icon">⚙️</span><span>Настройки</span>
         </button>
     </nav>
-
     <script>
         const tg = window.Telegram ? window.Telegram.WebApp : null;
-        if (tg) {
-            tg.ready();
-            tg.expand();
-        }
-
+        if (tg) { tg.ready(); tg.expand(); }
         let currentTab = 'tg';
-
         const GIFTS = [
-            { name: "Plush Pepe", emoji: "🐸", model: "Gold #402", tg: 145, tonnel: 138, mrkt: 142, diff: "-4.8%" },
-            { name: "Durov's Cap", emoji: "🧢", model: "Black BG #88", tg: 51, tonnel: 49, mrkt: 48.5, diff: "-5.1%" },
-            { name: "Precious Peach", emoji: "🍑", model: "Ruby #1204", tg: 24, tonnel: 22.8, mrkt: 23.5, diff: "-5.0%" },
-            { name: "Eternal Rose", emoji: "🌹", model: "Neon #310", tg: 39, tonnel: 37.5, mrkt: 38, diff: "-3.8%" },
-            { name: "Jelly Bunny", emoji: "🐰", model: "Cyber #991", tg: 19.5, tonnel: 18.2, mrkt: 18.9, diff: "-6.6%" },
-            { name: "Loot Bag", emoji: "💰", model: "Emerald #77", tg: 88, tonnel: 84, mrkt: 86, diff: "-4.5%" }
+            { name: "Plush Pepe", emoji: "🐸", model: "Gold #402", tg: 1450, tonnel: 1420, mrkt: 1435, lastSale: "1,410 TON (2 мин назад)" },
+            { name: "Durov's Cap", emoji: "🧢", model: "Black BG #88", tg: 510, tonnel: 495, mrkt: 500, lastSale: "490 TON (8 мин назад)" },
+            { name: "Precious Peach", emoji: "🍑", model: "Ruby #1204", tg: 240, tonnel: 235, mrkt: 238, lastSale: "230 TON (15 мин назад)" },
+            { name: "Eternal Rose", emoji: "🌹", model: "Neon #310", tg: 390, tonnel: 385, mrkt: 388, lastSale: "375 TON (4 мин назад)" },
+            { name: "Jelly Bunny", emoji: "🐰", model: "Cyber #991", tg: 195, tonnel: 190, mrkt: 192, lastSale: "188 TON (22 мин назад)" },
+            { name: "Loot Bag", emoji: "💰", model: "Emerald #77", tg: 880, tonnel: 865, mrkt: 870, lastSale: "850 TON (12 мин назад)" }
         ];
-
+        function el(tag, cls, text) {
+            const node = document.createElement(tag);
+            if (cls) node.className = cls;
+            if (text !== undefined) node.textContent = text;
+            return node;
+        }
+        function makeCol(title, price, isSelected) {
+            const col = el('div', 'market-col' + (isSelected ? ' selected' : ''));
+            col.appendChild(el('div', 'market-name', title));
+            col.appendChild(el('div', 'market-price', price + ' TON'));
+            return col;
+        }
         function renderGifts() {
             const searchInput = document.getElementById('search-input');
             const container = document.getElementById('market-view');
             if (!container || !searchInput) return;
-
             const q = searchInput.value.toLowerCase();
             container.innerHTML = '';
+            GIFTS.filter(function(g) {
+                return g.name.toLowerCase().includes(q) || g.model.toLowerCase().includes(q);
+            }).forEach(function(g) {
+                const card = el('div', 'gift-card');
+                const top = el('div', 'gift-top');
+                top.appendChild(el('div', 'gift-avatar', g.emoji));
+                const info = el('div', 'gift-info');
+                info.appendChild(el('div', 'gift-title', g.name));
+                info.appendChild(el('div', 'gift-model', g.model));
+                top.appendChild(info);
+                card.appendChild(top);
+                const prices = el('div', 'prices-container');
+        prices.appendChild(makeCol('TG Market', g.tg, currentTab === 'tg'));
+        prices.appendChild(makeCol('Tonnel', g.tonnel, currentTab === 'tonnel'));
+        prices.appendChild(makeCol('MRKT', g.mrkt, currentTab === 'mrkt'));
+        card.appendChild(prices);
 
-            GIFTS.filter(g => g.name.toLowerCase().includes(q) || g.model.toLowerCase().includes(q)).forEach(g => {
-                const price = g[currentTab];
-                container.innerHTML += `
-                    <div class="gift-card">
-                        <div>
-                            <div class="gift-emoji">${g.emoji}</div>
-                            <div class="gift-title">${g.name}</div>
-                            <div class="gift-meta">${g.model}</div>
-                        </div>
-                        <div class="gift-price-row">
-                            <span class="price-tag">${price} TON</span>
-                            <span class="diff-tag">${g.diff}</span>
-                        </div>
-                    </div>
-                `;
-            });
-        }
+        const hist = el('div', 'history-box');
+        hist.appendChild(el('span', '', 'Последняя продажа:'));
+        hist.appendChild(el('span', 'history-val', g.lastSale));
+        card.appendChild(hist);
 
-        function switchTab(tab, btn) {
-            currentTab = tab;
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            if (btn) btn.classList.add('active');
+        container.appendChild(card);
+    });
+}
 
-            const titles = { tg: "🛍 TG Market", tonnel: "🚇 Tonnel Market", mrkt: "🏪 MRKT", settings: "⚙️ Настройки и Подписка" };
-            const pageTitle = document.getElementById('page-title');
-            if (pageTitle) pageTitle.innerText = titles[tab];
+function switchTab(tab, btn) {
+    currentTab = tab;
+    document.querySelectorAll('.nav-item').forEach(function(item) {
+        item.classList.remove('active');
+    });
+    if (btn) btn.classList.add('active');
 
-            const marketView = document.getElementById('market-view');
-            const searchInput = document.getElementById('search-input');
-            const settingsView = document.getElementById('settings-view');
+    const titles = {
+        tg: "🛍 TG Market",
+        tonnel: "🚇 Tonnel Market",
+        mrkt: "🏪 MRKT",
+        settings: "⚙️ Настройки и Подписка"
+    };
+    const pageTitle = document.getElementById('page-title');
+    if (pageTitle) pageTitle.textContent = titles[tab];
 
-            if (tab === 'settings') {
-                marketView.classList.add('hidden');
-                searchInput.classList.add('hidden');
-                settingsView.classList.remove('hidden');
-            } else {
-                settingsView.classList.add('hidden');
-                marketView.classList.remove('hidden');
-                searchInput.classList.remove('hidden');
-                renderGifts();
-            }
-        }
+    const marketView = document.getElementById('market-view');
+    const searchInput = document.getElementById('search-input');
+    const settingsView = document.getElementById('settings-view');
 
-        function buyPlan(planCode) {
-            if (tg) {
-                tg.sendData(planCode);
-                tg.close();
-            } else {
-                alert("Выбран тариф: " + planCode);
-            }
-        }
-
+    if (tab === 'settings') {
+        marketView.classList.add('hidden');
+        searchInput.classList.add('hidden');
+        settingsView.classList.remove('hidden');
+    } else {
+        settingsView.classList.add('hidden');
+        marketView.classList.remove('hidden');
+        searchInput.classList.remove('hidden');
         renderGifts();
-    </script>
+    }
+}
+
+function sendPaymentData(payload) {
+    const dataStr = JSON.stringify(payload);
+    if (tg) {
+        tg.sendData(dataStr);
+        tg.close();
+    } else {
+        alert("Отправка в бот: " + dataStr);
+    }
+}
+
+function payWithCrypto(plan, amount) {
+    sendPaymentData({ method: "cryptobot", plan: plan, amount: amount });
+}
+
+function payWithStars(plan, stars) {
+    sendPaymentData({ method: "stars", plan: plan, amount: stars });
+}
+
+renderGifts();
+</script>
 </body>
 </html>
