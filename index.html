@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>NFT Gift Scanner</title>
-    <!-- Обязательный скрипт Telegram WebApp -->
     <script src="https://telegram.org"></script>
     <style>
         :root {
@@ -114,9 +113,12 @@
     </nav>
 
     <script>
-        const tg = window.Telegram.WebApp;
-        tg.ready();
-        tg.expand();
+        const tg = window.Telegram ? window.Telegram.WebApp : null;
+        if (tg) {
+            tg.ready();
+            tg.expand();
+        }
+
         let currentTab = 'tg';
 
         const GIFTS = [
@@ -129,9 +131,13 @@
         ];
 
         function renderGifts() {
-            const q = document.getElementById('search-input').value.toLowerCase();
+            const searchInput = document.getElementById('search-input');
             const container = document.getElementById('market-view');
+            if (!container || !searchInput) return;
+
+            const q = searchInput.value.toLowerCase();
             container.innerHTML = '';
+
             GIFTS.filter(g => g.name.toLowerCase().includes(q) || g.model.toLowerCase().includes(q)).forEach(g => {
                 const price = g[currentTab];
                 container.innerHTML += `
@@ -153,25 +159,35 @@
         function switchTab(tab, btn) {
             currentTab = tab;
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            btn.classList.add('active');
+            if (btn) btn.classList.add('active');
+
             const titles = { tg: "🛍 TG Market", tonnel: "🚇 Tonnel Market", mrkt: "🏪 MRKT", settings: "⚙️ Настройки и Подписка" };
-            document.getElementById('page-title').innerText = titles[tab];
+            const pageTitle = document.getElementById('page-title');
+            if (pageTitle) pageTitle.innerText = titles[tab];
+
+            const marketView = document.getElementById('market-view');
+            const searchInput = document.getElementById('search-input');
+            const settingsView = document.getElementById('settings-view');
+
             if (tab === 'settings') {
-                document.getElementById('market-view').classList.add('hidden');
-                document.getElementById('search-input').classList.add('hidden');
-                document.getElementById('settings-view').classList.remove('hidden');
+                marketView.classList.add('hidden');
+                searchInput.classList.add('hidden');
+                settingsView.classList.remove('hidden');
             } else {
-                document.getElementById('settings-view').classList.add('hidden');
-                document.getElementById('market-view').classList.remove('hidden');
-                document.getElementById('search-input').classList.remove('hidden');
+                settingsView.classList.add('hidden');
+                marketView.classList.remove('hidden');
+                searchInput.classList.remove('hidden');
                 renderGifts();
             }
         }
 
         function buyPlan(planCode) {
-            // Работает, если Mini App открыт через обычную кнопку клавиатуры (ReplyKeyboardMarkup)
-            tg.sendData(planCode);
-            tg.close();
+            if (tg) {
+                tg.sendData(planCode);
+                tg.close();
+            } else {
+                alert("Выбран тариф: " + planCode);
+            }
         }
 
         renderGifts();
